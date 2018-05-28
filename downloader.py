@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import subprocess
 import urllib.request
+import re
 
 base_url = 'http://lczero.org'
 url = '{}/networks'.format(base_url)
@@ -19,9 +20,18 @@ with urllib.request.urlopen(req) as response:
 soup = BeautifulSoup(html_data, 'html.parser')
 all_a = soup.find_all('a', {'class': ''})
 
-for index, a in enumerate(all_a):
-    if not index % 4:
-        save_as = a.get('download')
-        href = a.get('href')
-        url = base_url + href
-        subprocess.run(["wget", url, "-N", "-nc", "-O", save_as])
+bad_nets = [250]
+
+for a in all_a:
+    save_as = a.get('download')
+    net_number = int(re.search('(.*)_(\d*)\.txt\.gz', save_as).group(2))
+
+    if net_number < 126 or net_number % 4 != 0:
+        continue
+    print(net_number)
+    if net_number in bad_nets:
+        bad_nets.remove(net_number)
+        net_number -= 1
+    href = a.get('href')
+    url = base_url + href
+    subprocess.run(["wget", url, "-nc", "-O", 'weights_{}.txt.gz'.format(net_number)])
