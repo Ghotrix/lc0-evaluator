@@ -24,4 +24,4 @@ for index, a in enumerate(all_a):
         save_as = a.get('download')
         href = a.get('href')
         url = base_url + href
-        subprocess.run(["wget", url, "nc", "-O", save_as])
+        subprocess.run(["wget", url, "-N", "-nc", "-O", save_as])
