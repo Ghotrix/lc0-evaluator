@@ -42,7 +42,7 @@ except FileNotFoundError:
 
 cur_dir = os.getcwd()
 
-for i in range(0, 500):
+while True:
     least_played = get_least_played(players, weights)
     rand_nets = sample(least_played, 2)
     players[rand_nets[0]] += 1
