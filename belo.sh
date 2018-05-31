@@ -5,7 +5,7 @@ readpgn t.pgn
 elo
 mm
 exactdist
-offset 2599
+offset 2730
 ratings >ratings.txt
 STDIN
 

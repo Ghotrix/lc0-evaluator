@@ -21,7 +21,7 @@ soup = BeautifulSoup(html_data, 'html.parser')
 all_a = soup.find_all('a', {'class': ''})
 
 bad_nets = [250]
-good_nets = [345, 237]
+good_nets = [345, 237, 355]
 
 for a in all_a:
     save_as = a.get('download')
