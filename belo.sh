@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 bayeselo <<STDIN
-readpgn t.pgn
+readpgn t2.pgn
 elo
 mm
 exactdist

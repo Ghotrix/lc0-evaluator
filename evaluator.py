@@ -21,19 +21,19 @@ def sample_two_equal_opponents(weight_points):
     first_idx = ordered_by_points.index(random_weight)
     second_idx = first_idx + 1
     if second_idx >= len(ordered_by_points):
-        return [ordered_by_points[first_idx], ordered_by_points[second_idx - 2]]
+        return [ordered_by_points[first_idx][0], ordered_by_points[second_idx - 2][0]]
     else:
-        return [ordered_by_points[first_idx], ordered_by_points[second_idx]]
+        return [ordered_by_points[first_idx][0], ordered_by_points[second_idx][0]]
 
 
 def get_least_played_equal_opponents(players):
     least_played = [[k, v[0], v[1]] for k, v in players.items()
                     if v[0] == min(players.items(), key=lambda x: x[1][0])[1][0]]
-    rest_played = [[k, v[0], v[1]] for k, v in players.items()] - least_played
+    rest_played = [[k, v[0], v[1]] for k, v in players.items() if [k, v[0], v[1]] not in least_played]
 
     if len(least_played) == 1:
         least_played += [choice(rest_played)]
-        assert len(least_played == 2)
+        assert len(least_played) == 2
         return [w for w, n, p in least_played]
     equal_opponents = sample_two_equal_opponents(least_played)
     print('least played equal-ish nets: {}'.format(equal_opponents))
@@ -41,18 +41,19 @@ def get_least_played_equal_opponents(players):
 
 
 def get_points_from_result(result):
+    print('got {} result'.format(result))
     points = float('nan')
-    if result == '1-0':
+    if result in ['1-0', '1']:
         points = 1.
-    elif result == '0-1':
+    elif result in ['0-1', '0']:
         points = 0.
-    elif result == '1/2-1/2':
+    elif result in ['1/2-1/2', '1/2']:
         points = 0.5
 
     return points
 
 
-tournament_pgn = 't.pgn'
+tournament_pgn = 't2.pgn'
 
 weight_files = glob.glob('*.txt.gz')
 
@@ -82,12 +83,20 @@ cur_dir = os.getcwd()
 
 while True:
     least_played = get_least_played_equal_opponents(players)
-    players[least_played[0]][0] += 1
-    players[least_played[1]][0] += 1
-    print('game will be played between {} and {}'.format(least_played[0], least_played[1]))
+    white_weight = least_played[0]
+    black_weight = least_played[1]
+    print('game will be played between {} with {} games and {} points and {} with {} games and {} points'.format(white_weight, players[white_weight][0], players[white_weight][1], black_weight, players[black_weight][0], players[black_weight][1]))
     result = subprocess.run('cutechess-cli -pgnout {3} -engine name={0} cmd=./lc0.sh \
                              arg="--weights={2}/weights_{0}.txt.gz" -engine name={1} cmd=./lc0.sh \
                              arg="--weights={2}/weights_{1}.txt.gz" \
-                             -each proto=uci nodes=800 tc=inf'.format(least_played[0], least_played[1],
+                             -each proto=uci nodes=800 tc=inf'.format(white_weight, black_weight,
                                                                       cur_dir, tournament_pgn),
                             stdout=subprocess.PIPE, shell=True)
+    result = result.stdout.decode('ascii')
+    found = re.search('(.*)\): (.*)-(.*) \{(.*)', result)
+    players[white_weight][0] += 1
+    players[black_weight][0] += 1
+    players[white_weight][1] += get_points_from_result(found.group(2))
+    players[black_weight][1] += get_points_from_result(found.group(3))
+    print('current result of player {} is: {}'.format(white_weight, players[white_weight][1]))
+    print('current result of player {} is: {}'.format(black_weight, players[black_weight][1]))
