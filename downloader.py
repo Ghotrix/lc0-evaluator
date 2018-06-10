@@ -3,7 +3,7 @@ import subprocess
 import urllib.request
 import re
 
-base_url = 'http://lczero.org'
+base_url = 'http://testserver.lczero.org'
 url = '{}/networks'.format(base_url)
 req = urllib.request.Request(
     url,
@@ -20,14 +20,14 @@ with urllib.request.urlopen(req) as response:
 soup = BeautifulSoup(html_data, 'html.parser')
 all_a = soup.find_all('a', {'class': ''})
 
-bad_nets = [250]
-good_nets = [345, 237]
+bad_nets = []
+good_nets = [65]
 
 for a in all_a:
     save_as = a.get('download')
     net_number = int(re.search('(.*)_(\d*)\.txt\.gz', save_as).group(2))
 
-    if net_number < 126 or (net_number % 4 != 0 and net_number not in good_nets):
+    if net_number < 45 or (net_number % 3 != 0 and net_number not in good_nets):
         continue
     print(net_number)
     if net_number in bad_nets:
