@@ -14,10 +14,14 @@ def get_game_point_ratio(wnp):
         return points/float(games_num)
 
 
-def sample_two_equal_opponents(weight_points):
-    random_weight = choice(weight_points)
+def sample_two_equal_opponents(weight_points, fixed_opponent=None):
+    if fixed_opponent:
+        random_weight = fixed_opponent
+    else:
+        random_weight = choice(weight_points)
 
     ordered_by_points = sorted(weight_points, key=get_game_point_ratio)
+    print(ordered_by_points)
     first_idx = ordered_by_points.index(random_weight)
     second_idx = first_idx + 1
     if second_idx >= len(ordered_by_points):
@@ -32,9 +36,10 @@ def get_least_played_equal_opponents(players):
     rest_played = [[k, v[0], v[1]] for k, v in players.items() if [k, v[0], v[1]] not in least_played]
 
     if len(least_played) == 1:
-        least_played += [choice(rest_played)]
-        assert len(least_played) == 2
-        return [w for w, n, p in least_played]
+        rest_played += least_played
+        equal_opponents = sample_two_equal_opponents(rest_played, least_played[0])
+        print('least played equal-ish nets: {}'.format(equal_opponents))
+        return equal_opponents
     equal_opponents = sample_two_equal_opponents(least_played)
     print('least played equal-ish nets: {}'.format(equal_opponents))
     return equal_opponents
@@ -72,6 +77,8 @@ try:
 
             wh = int(game.headers['White'])
             bl = int(game.headers['Black'])
+            if wh not in weights or bl not in weights:
+                continue
             points = get_points_from_result(game.headers['Result'])
 
             players[wh][0], players[wh][1] = players[wh][0] + 1, players[wh][1] + points

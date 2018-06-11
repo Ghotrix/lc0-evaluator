@@ -5,8 +5,8 @@ readpgn t.pgn
 elo
 mm
 exactdist
-offset 2599
-ratings >ratings.txt
+offset 2271
+ratings 20>ratings.txt
 STDIN
 
 echo -e "\n"

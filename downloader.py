@@ -20,19 +20,17 @@ with urllib.request.urlopen(req) as response:
 soup = BeautifulSoup(html_data, 'html.parser')
 all_a = soup.find_all('a', {'class': ''})
 
-bad_nets = []
-good_nets = [65]
+bad_nets = [24, 27, 30, 33, 36, 39, 42, 45, 48]
+good_nets = [25, 65]
 
 for a in all_a:
     save_as = a.get('download')
     net_number = int(re.search('(.*)_(\d*)\.txt\.gz', save_as).group(2))
 
-    if net_number < 45 or (net_number % 3 != 0 and net_number not in good_nets):
+    if net_number < 23 or (net_number % 3 != 0 and net_number not in good_nets):
         continue
-    print(net_number)
     if net_number in bad_nets:
-        bad_nets.remove(net_number)
-        net_number -= 1
+        continue
     href = a.get('href')
     url = base_url + href
     subprocess.run(["wget", url, "-nc", "-O", 'weights_{}.txt.gz'.format(net_number)])
