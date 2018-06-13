@@ -1,7 +1,7 @@
 import glob
 import re
 import os
-from random import choice
+from random import choice, shuffle
 from chess import pgn
 import subprocess
 
@@ -58,7 +58,7 @@ def get_points_from_result(result):
     return points
 
 
-tournament_pgn = 't.pgn'
+tournament_pgn = '~/gdrive/t.pgn'
 
 weight_files = glob.glob('*.txt.gz')
 
@@ -90,6 +90,7 @@ cur_dir = os.getcwd()
 
 while True:
     least_played = get_least_played_equal_opponents(players)
+    shuffle(least_played)
     white_weight = least_played[0]
     black_weight = least_played[1]
     print('game will be played between {} with {} games and {} points and {} with {} games and {} points'.format(white_weight, players[white_weight][0], players[white_weight][1], black_weight, players[black_weight][0], players[black_weight][1]))

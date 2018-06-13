@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 bayeselo <<STDIN
-readpgn t.pgn
+readpgn ~/gdrive/t.pgn
 elo
 mm
 exactdist
-offset 2271
-ratings 20>ratings.txt
+offset 2600
+ratings >ratings.txt
 STDIN
 
 echo -e "\n"
