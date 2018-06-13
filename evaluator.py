@@ -58,7 +58,7 @@ def get_points_from_result(result):
     return points
 
 
-tournament_pgn = '~/gdrive/t.pgn'
+tournament_pgn = '/home/ghotrix/gdrive/t.pgn'
 
 weight_files = glob.glob('*.txt.gz')
 
@@ -84,6 +84,7 @@ try:
             players[wh][0], players[wh][1] = players[wh][0] + 1, players[wh][1] + points
             players[bl][0], players[bl][1] = players[bl][0] + 1, players[bl][1] + 1 - points
 except FileNotFoundError:
+    print('pgn at {} not found, starting from scratch...'.format(tournament_pgn))
     pass
 
 cur_dir = os.getcwd()
