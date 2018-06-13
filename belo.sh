@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 bayeselo <<STDIN
-readpgn /home/ghotrix/gdrive/t.pgn
+readpgn /home/ghotrix/Dropbox/t.pgn
 elo
 mm
 exactdist
