@@ -4,7 +4,7 @@ import urllib.request
 import re
 
 bad_nets = []
-good_nets = {'t': [75, 209, 212, 214, 215, 216, 217], 'm': [395, 403, 404, 405]}
+good_nets = {'t': [75, 209, 212, 214, 215, 216, 217, 219, 220], 'm': [395, 403, 404, 405, 407]}
 
 base_urls = {'t': 'http://testserver.lczero.org', 'm': 'http://lczero.org'}
 for k, base_url in base_urls.items():

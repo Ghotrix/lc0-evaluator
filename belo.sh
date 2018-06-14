@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 bayeselo <<STDIN
-readpgn /home/ghotrix/Dropbox/t.pgn
+readpgn t.pgn
 elo
 mm
 exactdist
-offset 2600
+offset 2300
 ratings >ratings.txt
 STDIN
 

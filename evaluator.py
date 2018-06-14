@@ -58,7 +58,7 @@ def get_points_from_result(result):
     return points
 
 
-tournament_pgn = '/home/ghotrix/Dropbox/t.pgn'
+tournament_pgn = 't.pgn'
 
 weight_files = glob.glob('*.txt.gz')
 
