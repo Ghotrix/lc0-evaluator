@@ -6,7 +6,7 @@ elo
 mm
 exactdist
 offset 2290
-ratings >ratings.txt
+ratings 1 players.txt>ratings.txt
 STDIN
 
 echo -e "\n"
